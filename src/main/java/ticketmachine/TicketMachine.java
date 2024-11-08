@@ -63,32 +63,45 @@ public class TicketMachine {
 	 * @throws IllegalArgumentException if amount is not positive
 	 */
 	public void insertMoney(int amount) {
-		balance = balance + amount;
+		// Vérifie si le montant est positif
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Amount inserted must be positive");
+		}
+		balance += amount;
 	}
 
 	/**
-	 * Refunds the balance to customer
+	 * Refunds the balance to customer and resets the balance to zero.
 	 *
-	 * @return the balance
+	 * @return the refunded balance
 	 */
 	public int refund() {
-		System.out.println("Je vous rends : " + balance + " centimes");
-		return balance;
+		int refundedBalance = balance; // Récupère le montant actuel
+		balance = 0; // Réinitialise la balance
+		System.out.println("Je vous rends : " + refundedBalance + " centimes");
+		return refundedBalance;
 	}
 
 	/**
-	 * Print a ticket. Update the total collected and reduce the balance 
+	 * Print a ticket if enough balance has been inserted. Update the total collected and reduce the balance.
 	 *
-	 * @return vrai si le ticket a été imprimé, faux sinon
+	 * @return true if the ticket was printed, false otherwise
 	 */
 	public boolean printTicket() {
-		// Simulate the printing of a ticket.
-		System.out.println("##################");
-		System.out.println("# The BlueJ Line");
-		System.out.println("# Ticket");
-		System.out.println("# " + price + " cents.");
-		System.out.println("##################");
-		System.out.println();
-		return true;
+		if (balance >= price) { // Vérifie que la balance est suffisante
+			// Simulate the printing of a ticket.
+			System.out.println("##################");
+			System.out.println("# The BlueJ Line");
+			System.out.println("# Ticket");
+			System.out.println("# " + price + " cents.");
+			System.out.println("##################");
+			System.out.println();
+			balance -= price; // Décrémente la balance
+			total += price; // Met à jour le total
+			return true;
+		} else {
+			System.out.println("Balance insuffisante pour imprimer le ticket.");
+			return false;
+		}
 	}
 }
